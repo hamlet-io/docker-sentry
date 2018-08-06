@@ -1,1 +1,5 @@
 # Add plugins here
+boto3
+
+#sentry plugins
+sentry-plugins
