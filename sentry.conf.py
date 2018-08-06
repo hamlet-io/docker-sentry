@@ -2,20 +2,27 @@
 # you can inherit and tweak settings to your hearts content.
 
 # For Docker, the following environment variables are supported:
+# - Standard Variables
 #  AWS_REGION
-#  SENTRY_DB_HOST
+#  SENTRY_DB_FQDN
 #  SENTRY_DB_PORT
 #  SENTRY_DB_NAME
 #  SENTRY_DB_USER
 #  SENTRY_DB_PASSWORD
+#  SENTRY_REDIS_FQDN
+#  SENTRY_REDIS_PASSWORD
+#  SENTRY_REDIS_PORT
+#  SENTRY_REDIS_DB
+#  SENTRY_USE_SSL
+#  SENTRY_SECRET_KEY
+#  GITHUBAUTH_CLIENTID
+#  GITHUBAUTH_SECRET
+
+# - Extra Variables
 #  SENTRY_RABBITMQ_HOST
 #  SENTRY_RABBITMQ_USERNAME
 #  SENTRY_RABBITMQ_PASSWORD
 #  SENTRY_RABBITMQ_VHOST
-#  SENTRY_REDIS_HOST
-#  SENTRY_REDIS_PASSWORD
-#  SENTRY_REDIS_PORT
-#  SENTRY_REDIS_DB
 #  SENTRY_MEMCACHED_HOST
 #  SENTRY_MEMCACHED_PORT
 #  SENTRY_FILESTORE_DIR
@@ -29,9 +36,6 @@
 #  SENTRY_SMTP_HOSTNAME
 #  SENTRY_MAILGUN_API_KEY
 #  SENTRY_SINGLE_ORGANIZATION
-#  SENTRY_SECRET_KEY
-#  GITHUBAUTH_CLIENTID
-#  GITHUBAUTH_SECRET
 #  BITBUCKET_CONSUMER_KEY
 #  BITBUCKET_CONSUMER_SECRET
 
@@ -97,7 +101,7 @@ def env(field_name, default=None):
         return string_or_b64kms(raw_value)
     return raw_value
 
-postgres = env('SENTRY_DB_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
+postgres = env('SENTRY_DB_FQDN') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
     DATABASES = {
         'default': {
@@ -150,9 +154,9 @@ SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION', True)
 # Generic Redis configuration used as defaults for various things including:
 # Buffers, Quotas, TSDB
 
-redis = env('SENTRY_REDIS_HOST') or (env('REDIS_PORT_6379_TCP_ADDR') and 'redis')
+redis = env('SENTRY_REDIS_FQDN') or (env('REDIS_PORT_6379_TCP_ADDR') and 'redis')
 if not redis:
-    raise Exception('Error: REDIS_PORT_6379_TCP_ADDR (or SENTRY_REDIS_HOST) is undefined, did you forget to `--link` a redis container?')
+    raise Exception('Error: REDIS_PORT_6379_TCP_ADDR (or SENTRY_REDIS_FQDN) is undefined, did you forget to `--link` a redis container?')
 
 redis_password = env('SENTRY_REDIS_PASSWORD') or ''
 redis_port = env('SENTRY_REDIS_PORT') or '6379'
