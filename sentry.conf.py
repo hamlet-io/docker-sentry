@@ -7,7 +7,7 @@
 #  SENTRY_DB_FQDN
 #  SENTRY_DB_PORT
 #  SENTRY_DB_NAME
-#  SENTRY_DB_USER
+#  SENTRY_DB_USERNAME
 #  SENTRY_DB_PASSWORD
 #  SENTRY_REDIS_FQDN
 #  SENTRY_REDIS_PASSWORD
@@ -103,7 +103,6 @@ def env(field_name, default=None):
 
 postgres = env('SENTRY_DB_FQDN') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
-    print("Password: {}".format(env('SENTRY_DB_PASSWORD') ))
     DATABASES = {
         'default': {
             'ENGINE': 'sentry.db.postgres',
@@ -113,7 +112,7 @@ if postgres:
                 or 'postgres'
             ),
             'USER': (
-                env('SENTRY_DB_USER')
+                env('SENTRY_DB_USERNAME')
                 or env('POSTGRES_ENV_POSTGRES_USER')
                 or 'postgres'
             ),
