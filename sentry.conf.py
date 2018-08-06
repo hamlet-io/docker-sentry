@@ -103,6 +103,7 @@ def env(field_name, default=None):
 
 postgres = env('SENTRY_DB_FQDN') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
+    print("Password: {}".format(env('SENTRY_DB_PASSWORD') ))
     DATABASES = {
         'default': {
             'ENGINE': 'sentry.db.postgres',
