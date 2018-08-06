@@ -2,8 +2,9 @@
 # you can inherit and tweak settings to your hearts content.
 
 # For Docker, the following environment variables are supported:
-#  SENTRY_POSTGRES_HOST
-#  SENTRY_POSTGRES_PORT
+#  AWS_REGION
+#  SENTRY_DB_HOST
+#  SENTRY_DB_PORT
 #  SENTRY_DB_NAME
 #  SENTRY_DB_USER
 #  SENTRY_DB_PASSWORD
@@ -33,6 +34,7 @@
 #  GITHUB_API_SECRET
 #  BITBUCKET_CONSUMER_KEY
 #  BITBUCKET_CONSUMER_SECRET
+
 from sentry.conf.server import *  # NOQA
 
 import os
