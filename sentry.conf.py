@@ -150,16 +150,6 @@ SENTRY_USE_BIG_INTS = True
 # and thus various UI optimizations should be enabled.
 SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION', True)
 
-SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', 'production' )
-
-url_prefix = env('SITE_URL', 'http://localhost:9000')
-if not url_prefix:
-    SENTRY_OPTIONS['system.url-prefix'] = url_prefix
-
-admin_email = env('SENTRY_ADMIN_EMAIL', 'root@local.host')
-if not admin_email:
-    SENTRY_OPTIONS['system.admin-email'] = admin_email
-
 #########
 # Redis #
 #########
