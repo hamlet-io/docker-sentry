@@ -15,8 +15,11 @@
 #  SENTRY_REDIS_DB
 #  SENTRY_USE_SSL
 #  SENTRY_SECRET_KEY
+#  SENTRY_ENVIRONMENT
+#  SENTRY_ADMIN_EMAIL
 #  GITHUBAUTH_CLIENTID
 #  GITHUBAUTH_SECRET
+#  SITE_URL
 
 # - Extra Variables
 #  SENTRY_RABBITMQ_HOST
@@ -149,11 +152,11 @@ SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION', True)
 
 SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', 'production' )
 
-url_prefix = env('SITE_URL')
+url_prefix = env('SITE_URL', 'http://localhost:9000')
 if not url_prefix:
     SENTRY_OPTIONS['system.url-prefix'] = url_prefix
 
-admin_email = env('SENTRY_ADMIN_EMAIL')
+admin_email = env('SENTRY_ADMIN_EMAIL', 'root@local.host')
 if not admin_email:
     SENTRY_OPTIONS['system.admin-email'] = admin_email
 
