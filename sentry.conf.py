@@ -27,7 +27,7 @@
 #  SENTRY_MEMCACHED_PORT
 #  SENTRY_FILESTORE_DIR
 #  SENTRY_SERVER_EMAIL
-#  SENTRY_EMAIL_HOST
+#  SENTRY_EMAIL_FQDN
 #  SENTRY_EMAIL_PORT
 #  SENTRY_EMAIL_USER
 #  SENTRY_EMAIL_PASSWORD
@@ -38,6 +38,11 @@
 #  SENTRY_SINGLE_ORGANIZATION
 #  BITBUCKET_CONSUMER_KEY
 #  BITBUCKET_CONSUMER_SECRET
+#  SENTRY_URL_PREFIX
+#  SENTRY_ADMIN_EMAIL
+#  SLACK_CLIENT_ID
+#  SLACK_CLIENT_SECRET
+#  SLACK_VERIFICATION_TOKEN
 
 from sentry.conf.server import *  # NOQA
 
@@ -145,7 +150,11 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION', True)
+SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION') or False
+SENTRY_BEACON = env('SENTRY_BEACON') or False
+SENTRY_FEATURES['auth:register'] = env('SENTRY_AUTH_REGISTER') or False
+SENTRY_OPTIONS['system.url-prefix'] = env('SENTRY_URL_PREFIX', 'http://localhost')
+SENTRY_OPTIONS['system.admin-email'] = env('SENTRY_ADMIN_EMAIL', 'root@localhost')
 
 #########
 # Redis #
@@ -312,21 +321,24 @@ SENTRY_WEB_OPTIONS = {
 # Mail Server #
 ###############
 
+### - Outbound Email
 
-email = env('SENTRY_EMAIL_HOST') or (env('SMTP_PORT_25_TCP_ADDR') and 'smtp')
-if email:
+email_backend = env('SENTRY_EMAIL_BACKEND', 'smtp' )
+
+if email_backend == 'smtp':
     SENTRY_OPTIONS['mail.backend'] = 'smtp'
-    SENTRY_OPTIONS['mail.host'] = email
+    SENTRY_OPTIONS['mail.host'] = env('SENTRY_EMAIL_FQDN') or (env('SMTP_PORT_25_TCP_ADDR') and 'smtp')
     SENTRY_OPTIONS['mail.password'] = env('SENTRY_EMAIL_PASSWORD') or ''
     SENTRY_OPTIONS['mail.username'] = env('SENTRY_EMAIL_USER') or ''
     SENTRY_OPTIONS['mail.port'] = int(env('SENTRY_EMAIL_PORT') or 25)
     SENTRY_OPTIONS['mail.use-tls'] = env('SENTRY_EMAIL_USE_TLS', False)
 else:
-    SENTRY_OPTIONS['mail.backend'] = 'dummy'
+    SENTRY_OPTIONS['mail.backend'] = email_backend
 
 # The email address to send on behalf of
 SENTRY_OPTIONS['mail.from'] = env('SENTRY_SERVER_EMAIL') or 'root@localhost'
 
+### - Inbound Mail
 # If you're using mailgun for inbound mail, set your API key and configure a
 # route to forward to /api/hooks/mailgun/inbound/
 SENTRY_OPTIONS['mail.mailgun-api-key'] = env('SENTRY_MAILGUN_API_KEY') or ''
@@ -366,3 +378,8 @@ if 'GITHUBAUTH_CLIENTID' in os.environ:
 if 'BITBUCKET_CONSUMER_KEY' in os.environ:
     BITBUCKET_CONSUMER_KEY = env('BITBUCKET_CONSUMER_KEY')
     BITBUCKET_CONSUMER_SECRET = env('BITBUCKET_CONSUMER_SECRET')
+
+if 'SLACK_CLIENT_ID' in os.environ and 'SLACK_CLIENT_SECRET' in os.environ :
+    SENTRY_OPTIONS['slack.client-id'] = env('SLACK_CLIENT_ID')
+    SENTRY_OPTIONS['slack.client-secret'] = env('SLACK_CLIENT_SECRET')
+    SENTRY_OPTIONS['slack.verification-token'] = env('SLACK_VERIFICATION_TOKEN', '')
