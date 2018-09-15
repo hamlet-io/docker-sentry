@@ -13,6 +13,7 @@ fi
 sentry upgrade --noinput 
 
 #Create default admin user
+# NOTE Password can not be reset using this process this is intended for a run once user setup
 user_status=0
 sentry permissions list --user "${SENTRY_ADMIN_EMAIL}" || user_status=$? 
 
