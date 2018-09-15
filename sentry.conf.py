@@ -335,7 +335,7 @@ SENTRY_WEB_OPTIONS = {
 
 ### - Outbound Email
 
-email_backend = env('SENTRY_EMAIL_BACKEND', 'smtp' )
+email_backend = env('SENTRY_EMAIL_BACKEND', 'dummy' )
 
 if email_backend == 'smtp':
     SENTRY_OPTIONS['mail.backend'] = 'smtp'
