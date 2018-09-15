@@ -150,9 +150,21 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION') or False
-SENTRY_BEACON = env('SENTRY_BEACON') or False
-SENTRY_FEATURES['auth:register'] = env('SENTRY_AUTH_REGISTER') or False
+if env('SENTRY_SINGLE_ORGANIZATION') == 'True': 
+    SENTRY_SINGLE_ORGANIZATION = True
+else:
+    SENTRY_SINGLE_ORGANIZATION = False
+
+if env('SENTRY_BEACON') == 'True':
+    SENTRY_BEACON = True
+else:
+    SENTRY_BEACON = False
+
+if env('SENTRY_AUTH_REGISTER') == 'True':
+    SENTRY_FEATURES['auth:register'] = True
+else:
+    SENTRY_FEATURES['auth:register'] = False
+
 SENTRY_OPTIONS['system.url-prefix'] = env('SENTRY_URL_PREFIX', 'http://localhost')
 SENTRY_OPTIONS['system.admin-email'] = env('SENTRY_ADMIN_EMAIL', 'root@localhost')
 
