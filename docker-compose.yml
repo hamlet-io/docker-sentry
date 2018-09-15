@@ -29,6 +29,7 @@ x-defaults: &defaults
     SENTRY_EMAIL_BACKED: smtp
     SENTRY_EMAIL_FQDN: smtp
     SENTRY_URL_PREFIX: http://localhost:9000
+    SENTRY_ADMIN_PASSWORD_ENCRYPTED: 1
 
   volumes:
     - sentry-data:/var/lib/sentry/files

@@ -1,4 +1,5 @@
 FROM sentry:9.0-onbuild
 
-COPY scripts/init /init
+COPY scripts/ /
+
 RUN chmod ugo+x /init
