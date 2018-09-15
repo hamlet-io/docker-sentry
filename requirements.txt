@@ -1,5 +1,6 @@
 # Add plugins here
 boto3
+awscli
 
 #sentry plugins
 sentry-plugins
