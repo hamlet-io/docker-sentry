@@ -150,20 +150,9 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-if env('SENTRY_SINGLE_ORGANIZATION') == 'True': 
-    SENTRY_SINGLE_ORGANIZATION = True
-else:
-    SENTRY_SINGLE_ORGANIZATION = False
-
-if env('SENTRY_BEACON') == 'True':
-    SENTRY_BEACON = True
-else:
-    SENTRY_BEACON = False
-
-if env('SENTRY_AUTH_REGISTER') == 'True':
-    SENTRY_FEATURES['auth:register'] = True
-else:
-    SENTRY_FEATURES['auth:register'] = False
+SENTRY_SINGLE_ORGANIZATION = bool(env('SENTRY_SINGLE_ORGANIZATION', True))
+SENTRY_BEACON = bool(env('SENTRY_BEACON', True))
+SENTRY_FEATURES['auth:register'] = bool(env('SENTRY_AUTH_REGISTER', True))
 
 SENTRY_OPTIONS['system.url-prefix'] = env('SENTRY_URL_PREFIX', 'http://localhost')
 SENTRY_OPTIONS['system.admin-email'] = env('SENTRY_ADMIN_EMAIL', 'root@localhost')
@@ -317,7 +306,7 @@ SENTRY_OPTIONS['filestore.options'] = {
 # If you're using a reverse SSL proxy, you should enable the X-Forwarded-Proto
 # header and set `SENTRY_USE_SSL=1`
 
-if env('SENTRY_USE_SSL', False):
+if bool(env('SENTRY_USE_SSL', False)):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -343,7 +332,7 @@ if email_backend == 'smtp':
     SENTRY_OPTIONS['mail.password'] = env('SENTRY_EMAIL_PASSWORD') or ''
     SENTRY_OPTIONS['mail.username'] = env('SENTRY_EMAIL_USER') or ''
     SENTRY_OPTIONS['mail.port'] = int(env('SENTRY_EMAIL_PORT') or 25)
-    SENTRY_OPTIONS['mail.use-tls'] = env('SENTRY_EMAIL_USE_TLS', False)
+    SENTRY_OPTIONS['mail.use-tls'] = bool(env('SENTRY_EMAIL_USE_TLS', False))
 else:
     SENTRY_OPTIONS['mail.backend'] = email_backend
 
