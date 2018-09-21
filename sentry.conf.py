@@ -338,6 +338,7 @@ else:
 
 # The email address to send on behalf of
 SENTRY_OPTIONS['mail.from'] = env('SENTRY_SERVER_EMAIL') or 'root@localhost'
+SENTRY_OPTIONS['mail.list-namespace'] = env('SENTRY_EMAIL_LIST_NAMESPACE', 'localhost')
 
 ### - Inbound Mail
 # If you're using mailgun for inbound mail, set your API key and configure a
