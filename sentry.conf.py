@@ -45,6 +45,7 @@
 #  SLACK_VERIFICATION_TOKEN
 
 from sentry.conf.server import *  # NOQA
+from sentry.utils.types import Bool
 
 import os
 import os.path
@@ -150,9 +151,9 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = bool(env('SENTRY_SINGLE_ORGANIZATION', True))
-SENTRY_BEACON = bool(env('SENTRY_BEACON', False))
-SENTRY_FEATURES['auth:register'] = bool(env('SENTRY_AUTH_REGISTER', False))
+SENTRY_SINGLE_ORGANIZATION = Bool(os.environ.get('SENTRY_SINGLE_ORGANIZATION', True))
+SENTRY_BEACON = Bool(os.environ.get('SENTRY_BEACON', False))
+SENTRY_FEATURES['auth:register'] = Bool(os.environ.get('SENTRY_AUTH_REGISTER', False))
 
 SENTRY_OPTIONS['system.url-prefix'] = env('SENTRY_URL_PREFIX', 'http://localhost')
 SENTRY_OPTIONS['system.admin-email'] = env('SENTRY_ADMIN_EMAIL', 'root@localhost')
