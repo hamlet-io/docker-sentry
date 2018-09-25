@@ -5,7 +5,7 @@ set -o errexit
 set -o nounset
 
 if [[ -n "${SENTRY_ADMIN_PASSWORD_ENCRYPTED:-""}" ]]; then 
-    python /admin_decrypt.py 
+    SENTRY_ADMIN_PASSWORD="$(python /admin_decrypt.py)"
 fi
 
 #Run Upgrade/Migration 

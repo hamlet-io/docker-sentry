@@ -51,5 +51,5 @@ def string_or_b64kms(value):
         logging.exception(e)
     return value
 
-
-os.environ['SENTRY_ADMIN_PASSWORD'] = string_or_b64kms(ADMIN_PASSWORD)
+admin_password = string_or_b64kms(ADMIN_PASSWORD)
+print(admin_password)
