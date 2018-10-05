@@ -3,4 +3,4 @@ boto3
 
 #sentry plugins
 sentry-plugins
-https://github.com/getsentry/sentry-auth-github/archive/master.zip
+https://github.com/ktlg/sentry-auth-github/archive/master.zip
