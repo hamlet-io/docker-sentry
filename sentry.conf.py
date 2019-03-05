@@ -25,6 +25,7 @@
 #  SENTRY_RABBITMQ_VHOST
 #  SENTRY_MEMCACHED_HOST
 #  SENTRY_MEMCACHED_PORT
+#  SENTRY_FILESTORE_BACKEND
 #  SENTRY_FILESTORE_DIR
 #  SENTRY_SERVER_EMAIL
 #  SENTRY_EMAIL_FQDN
@@ -295,7 +296,7 @@ SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
 # Uploaded media uses these `filestore` settings. The available
 # backends are either `filesystem` or `s3`.
 
-SENTRY_OPTIONS['filestore.backend'] = 'filesystem'
+SENTRY_OPTIONS['filestore.backend'] = env('SENTRY_FILESTORE_BACKEND') or 'filesystem'
 SENTRY_OPTIONS['filestore.options'] = {
     'location': env('SENTRY_FILESTORE_DIR'),
 }
