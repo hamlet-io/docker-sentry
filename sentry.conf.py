@@ -297,9 +297,15 @@ SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
 # backends are either `filesystem` or `s3`.
 
 SENTRY_OPTIONS['filestore.backend'] = env('SENTRY_FILESTORE_BACKEND') or 'filesystem'
-SENTRY_OPTIONS['filestore.options'] = {
-    'location': env('SENTRY_FILESTORE_DIR'),
-}
+
+if SENTRY_OPTIONS['filestore.backend'] == 's3':
+        SENTRY_OPTIONS['filestore.options'] = {
+        'bucket_name' : env('SENTRY_FILESTORE_BUCKET'),
+    }
+else:
+    SENTRY_OPTIONS['filestore.options'] = {
+        'location': env('SENTRY_FILESTORE_DIR'),
+    }
 
 ##############
 # Web Server #
