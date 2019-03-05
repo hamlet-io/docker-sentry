@@ -301,6 +301,8 @@ SENTRY_OPTIONS['filestore.backend'] = env('SENTRY_FILESTORE_BACKEND') or 'filesy
 if SENTRY_OPTIONS['filestore.backend'] == 's3':
         SENTRY_OPTIONS['filestore.options'] = {
         'bucket_name' : env('SENTRY_FILESTORE_BUCKET'),
+        'default_acl' : 'private',
+        'region_name' : env('AWS_REGION') or 'us-east-1',
     }
 else:
     SENTRY_OPTIONS['filestore.options'] = {
