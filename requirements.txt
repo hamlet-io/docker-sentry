@@ -4,3 +4,7 @@ boto3
 #sentry plugins
 sentry-plugins
 https://github.com/ktlg/sentry-auth-github/archive/v1.0.0.zip
+
+# Sentry fork for oidc based auth 
+# https://github.com/siemens/sentry-auth-oidc
+sentry-auth-oidc

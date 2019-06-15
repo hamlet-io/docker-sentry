@@ -395,3 +395,9 @@ if 'SLACK_CLIENT_ID' in os.environ and 'SLACK_CLIENT_SECRET' in os.environ :
     SENTRY_OPTIONS['slack.client-id'] = env('SLACK_CLIENT_ID')
     SENTRY_OPTIONS['slack.client-secret'] = env('SLACK_CLIENT_SECRET')
     SENTRY_OPTIONS['slack.verification-token'] = env('SLACK_VERIFICATION_TOKEN', '')
+
+if 'OIDC_CLIENT_ID' in os.environ and 'OIDC_CLIENT_SECRET' in os.environ :
+    OIDC_CLIENT_ID = env('OIDC_CLIENT_ID')
+    OIDC_CLIENT_SECRET = env('OIDC_CLIENT_SECRET')
+    OIDC_DOMAIN = env('OIDC_DOMAIN')
+    OIDC_SCOPE = env('OIDC_SCOPE') or 'openid email'
