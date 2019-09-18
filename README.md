@@ -44,9 +44,26 @@ docker-compose run --rm web upgrade # Run new migrations
 docker-compose up -d # Recreate the services
 ```
 
+## Configuring the Slack Plugin
+
+With the release of sentry 9.1.2 the slack plugin has moved from a per project integration to an installation wide plugin which uses a Slack App to integrate with one or many slack channels.
+
+Configuring the Slack App itself is covered in this [forum post](https://forum.sentry.io/t/how-to-configure-slack-in-your-on-prem-sentry/3463)
+
+To specify the Slack OAuth Details specify the following environment variables
+
+* SLACK_CLIENT_ID - The Slack App Client Id
+* SLACK_CLIENT_SECRET = The Slack App Client Secret
+* SLACK_VERIFICATION_TOKEN - The Slack App Verification token
+
+A couple of extra notes:
+
+* when you create the Slack app don’t invite it to the workspace, let it do add from within the Sentry plugin. Otherwise it gets confussed
+* The sentry slack environment variables (oauth config) need to be added before adding the Event Subscription URL in Slack, the validation process will fail without
+
 ## Resources
 
- * [Documentation](https://docs.sentry.io/server/installation/docker/)
- * [Bug Tracker](https://github.com/getsentry/onpremise)
- * [Forums](https://forum.sentry.io/c/on-premise)
- * [IRC](irc://chat.freenode.net/sentry) (chat.freenode.net, #sentry)
+* [Documentation](https://docs.sentry.io/server/installation/docker/)
+* [Bug Tracker](https://github.com/getsentry/onpremise)
+* [Forums](https://forum.sentry.io/c/on-premise)
+* [IRC](irc://chat.freenode.net/sentry) (chat.freenode.net, #sentry)
