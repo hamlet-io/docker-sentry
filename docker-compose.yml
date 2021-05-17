@@ -11,7 +11,6 @@ x-sentry-defaults: &sentry_defaults
   image: sentry-onpremise-local
   depends_on:
     - redis
-    - postgres
     - memcached
     - smtp
     - snuba-api
@@ -22,6 +21,8 @@ x-sentry-defaults: &sentry_defaults
     - kafka
   environment:
     SNUBA: 'http://snuba-api:1218'
+  env_file:
+    - ./sentry/.env
   volumes:
     - 'sentry-data:/data'
 x-snuba-defaults: &snuba_defaults
@@ -60,13 +61,6 @@ services:
     image: 'redis:5.0-alpine'
     volumes:
       - 'sentry-redis:/data'
-  postgres:
-    << : *restart_policy
-    image: 'postgres:9.6'
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: 'trust'
-    volumes:
-      - 'sentry-postgres:/var/lib/postgresql/data'
   zookeeper:
     << : *restart_policy
     image: 'confluentinc/cp-zookeeper:5.1.2'
@@ -168,8 +162,6 @@ services:
     command: '"0 0 * * * gosu sentry sentry cleanup --days $SENTRY_EVENT_RETENTION_DAYS"'
 volumes:
   sentry-data:
-    external: true
-  sentry-postgres:
     external: true
   sentry-redis:
     external: true
