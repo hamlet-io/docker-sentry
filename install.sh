@@ -80,7 +80,6 @@ $dc down --rmi local --remove-orphans
 echo ""
 echo "Creating volumes for persistent storage..."
 echo "Created $(docker volume create --name=sentry-data)."
-echo "Created $(docker volume create --name=sentry-postgres)."
 echo "Created $(docker volume create --name=sentry-redis)."
 echo "Created $(docker volume create --name=sentry-zookeeper)."
 echo "Created $(docker volume create --name=sentry-kafka)."
