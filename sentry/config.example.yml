@@ -34,7 +34,7 @@ mail.host: 'smtp'
 # If this file ever becomes compromised, it's important to generate a new key.
 # Changing this value will result in all current sessions being invalidated.
 # A new key can be generated with `$ sentry config generate-secret-key`
-system.secret-key: '!!changeme!!'
+#system.secret-key: '!!changeme!!'
 
 # The ``redis.clusters`` setting is used, unsurprisingly, to configure Redis
 # clusters. These clusters can be then referred to by name when configuring
@@ -53,11 +53,11 @@ system.secret-key: '!!changeme!!'
 # Uploaded media uses these `filestore` settings. The available
 # backends are either `filesystem` or `s3`.
 
-filestore.backend: 'filesystem'
-filestore.options:
-  location: '/data/files'
-dsym.cache-path: '/data/dsym-cache'
-releasefile.cache-path: '/data/releasefile-cache'
+#filestore.backend: 'filesystem'
+#filestore.options:
+#  location: '/data/files'
+#dsym.cache-path: '/data/dsym-cache'
+#releasefile.cache-path: '/data/releasefile-cache'
 
 # filestore.backend: 's3'
 # filestore.options:
