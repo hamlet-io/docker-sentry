@@ -2,6 +2,7 @@
 # you can inherit and tweak settings to your hearts content.
 
 from sentry.conf.server import *  # NOQA
+from sentry.utils.types import Bool
 
 
 # Generously adapted from pynetlinux: https://git.io/JJmga
@@ -33,16 +34,33 @@ def get_internal_network():
 INTERNAL_SYSTEM_IPS = (get_internal_network(),)
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "sentry.db.postgres",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "",
-        "HOST": "postgres",
-        "PORT": "",
+postgres = env('SENTRY_DB_FQDN') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
+if postgres:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'sentry.db.postgres',
+            'NAME': (
+                env('SENTRY_DB_NAME')
+                or env('POSTGRES_ENV_POSTGRES_USER')
+                or 'postgres'
+            ),
+            'USER': (
+                env('SENTRY_DB_USERNAME')
+                or env('POSTGRES_ENV_POSTGRES_USER')
+                or 'postgres'
+            ),
+            'PASSWORD': (
+                env('SENTRY_DB_PASSWORD')
+                or env('POSTGRES_ENV_POSTGRES_PASSWORD')
+                or ''
+            ),
+            'HOST': postgres,
+            'PORT': (
+                env('SENTRY_DB_PORT')
+                or ''
+            ),
+        },
     }
-}
 
 # You should not change this setting after your database has been created
 # unless you have altered all schemas first
@@ -57,7 +75,7 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = True
+SENTRY_SINGLE_ORGANIZATION = Bool(os.environ.get('SENTRY_SINGLE_ORGANIZATION', True))
 
 SENTRY_OPTIONS["system.event-retention-days"] = int(
     env("SENTRY_EVENT_RETENTION_DAYS", "90")
@@ -177,6 +195,26 @@ SENTRY_TAGSTORE_OPTIONS = {}
 # The digest backend powers notification summaries.
 
 SENTRY_DIGESTS = "sentry.digests.backends.redis.RedisBackend"
+
+################
+# File storage #
+################
+
+# Uploaded media uses these `filestore` settings. The available
+# backends are either `filesystem` or `s3`.
+
+SENTRY_OPTIONS['filestore.backend'] = env('SENTRY_FILESTORE_BACKEND') or 'filesystem'
+
+if SENTRY_OPTIONS['filestore.backend'] == 's3':
+        SENTRY_OPTIONS['filestore.options'] = {
+        'bucket_name' : env('SENTRY_FILESTORE_BUCKET'),
+        'default_acl' : 'private',
+        'region_name' : env('AWS_REGION') or 'us-east-1',
+    }
+else:
+    SENTRY_OPTIONS['filestore.options'] = {
+        'location': env('SENTRY_FILESTORE_DIR'),
+    }
 
 ##############
 # Web Server #
