@@ -6,7 +6,6 @@ x-sentry-defaults: &sentry_defaults
   image: "$SENTRY_IMAGE"
   depends_on:
     - redis
-    - postgres
     - memcached
     - smtp
     - snuba-api
@@ -28,6 +27,8 @@ x-sentry-defaults: &sentry_defaults
     # Leaving the value empty to just pass whatever is set
     # on the host system (or in the .env file)
     SENTRY_EVENT_RETENTION_DAYS:
+  env_file:
+    - ./sentry/.env
   volumes:
     - "sentry-data:/data"
     - "./sentry:/etc/sentry"
@@ -68,13 +69,6 @@ services:
       nofile:
         soft: 10032
         hard: 10032
-  postgres:
-    <<: *restart_policy
-    image: "postgres:9.6"
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-    volumes:
-      - "sentry-postgres:/var/lib/postgresql/data"
   zookeeper:
     <<: *restart_policy
     image: "confluentinc/cp-zookeeper:5.5.0"
@@ -261,8 +255,6 @@ services:
       - redis
 volumes:
   sentry-data:
-    external: true
-  sentry-postgres:
     external: true
   sentry-redis:
     external: true

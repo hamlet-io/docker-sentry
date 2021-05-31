@@ -20,7 +20,6 @@ source turn-things-off.sh
 source set-up-zookeeper.sh
 source bootstrap-snuba.sh
 source create-kafka-topics.sh
-source upgrade-postgres.sh
 source set-up-and-migrate-database.sh
 source migrate-file-storage.sh
 source relay-credentials.sh
