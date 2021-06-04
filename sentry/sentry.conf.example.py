@@ -2,7 +2,9 @@
 # you can inherit and tweak settings to your hearts content.
 
 from sentry.conf.server import *  # NOQA
-from sentry.utils.types import Bool
+from sentry.utils.types import Bool, String
+
+from urllib.parse import urlparse
 
 
 # Generously adapted from pynetlinux: https://git.io/JJmga
@@ -34,34 +36,6 @@ def get_internal_network():
 INTERNAL_SYSTEM_IPS = (get_internal_network(),)
 
 
-postgres = env('SENTRY_DB_FQDN') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
-if postgres:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'sentry.db.postgres',
-            'NAME': (
-                env('SENTRY_DB_NAME')
-                or env('POSTGRES_ENV_POSTGRES_USER')
-                or 'postgres'
-            ),
-            'USER': (
-                env('SENTRY_DB_USERNAME')
-                or env('POSTGRES_ENV_POSTGRES_USER')
-                or 'postgres'
-            ),
-            'PASSWORD': (
-                env('SENTRY_DB_PASSWORD')
-                or env('POSTGRES_ENV_POSTGRES_PASSWORD')
-                or ''
-            ),
-            'HOST': postgres,
-            'PORT': (
-                env('SENTRY_DB_PORT')
-                or ''
-            ),
-        },
-    }
-
 # You should not change this setting after your database has been created
 # unless you have altered all schemas first
 SENTRY_USE_BIG_INTS = True
@@ -75,11 +49,34 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = Bool(os.environ.get('SENTRY_SINGLE_ORGANIZATION', True))
+SENTRY_SINGLE_ORGANIZATION = Bool(env('SENTRY_SINGLE_ORGANIZATION', True)
 
 SENTRY_OPTIONS["system.event-retention-days"] = int(
     env("SENTRY_EVENT_RETENTION_DAYS", "90")
 )
+
+######################
+# Database           #
+######################
+
+if "DATABASE_URL" in os.environ:
+    url = urlparse(os.environ["DATABASE_URL"])
+
+    # Ensure default database exists.
+    DATABASES["default"] = DATABASES.get("default", {})
+
+    # Update with environment configuration.
+    DATABASES["default"].update(
+        {
+            "NAME": url.path[1:],
+            "USER": url.username,
+            "PASSWORD": url.password,
+            "HOST": url.hostname,
+            "PORT": url.port,
+        }
+    )
+    if url.scheme == "postgres":
+        DATABASES["default"]["ENGINE"] = "sentry.db.postgres"
 
 #########
 # Redis #
@@ -310,3 +307,12 @@ GEOIP_PATH_MMDB = '/geoip/GeoLite2-City.mmdb'
 
 # BITBUCKET_CONSUMER_KEY = 'YOUR_BITBUCKET_CONSUMER_KEY'
 # BITBUCKET_CONSUMER_SECRET = 'YOUR_BITBUCKET_CONSUMER_SECRET'
+
+######################
+# OIDC Configuration #
+######################
+
+OIDC_CLIENT_ID = String(env('OIDC_CLIENT_ID'))
+OIDC_CLIENT_SECRET = String(env('OIDC_CLIENT_ID'))
+OIDC_SCOPE = String(env('OIDC_SCOPE'))
+OIDC_DOMAIN = String(env('OIDC_DOMAIN'))
