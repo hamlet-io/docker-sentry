@@ -313,6 +313,6 @@ GEOIP_PATH_MMDB = '/geoip/GeoLite2-City.mmdb'
 ######################
 
 OIDC_CLIENT_ID = String(env('OIDC_CLIENT_ID'))
-OIDC_CLIENT_SECRET = String(env('OIDC_CLIENT_ID'))
+OIDC_CLIENT_SECRET = String(env('OIDC_CLIENT_SECRET'))
 OIDC_SCOPE = String(env('OIDC_SCOPE'))
 OIDC_DOMAIN = String(env('OIDC_DOMAIN'))
