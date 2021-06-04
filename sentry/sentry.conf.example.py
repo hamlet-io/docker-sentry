@@ -5,6 +5,7 @@ from sentry.conf.server import *  # NOQA
 from sentry.utils.types import Bool, String
 
 from urllib.parse import urlparse
+import os
 
 
 # Generously adapted from pynetlinux: https://git.io/JJmga
@@ -59,8 +60,8 @@ SENTRY_OPTIONS["system.event-retention-days"] = int(
 # Database           #
 ######################
 
-if env("DATABASE_URL", None) is not None:
-    url = urlparse(env("DATABASE_URL"))
+if "DATABASE_URL" in os.environ:
+    url = urlparse(os.environ["DATABASE_URL"])
 
     # Ensure default database exists.
     DATABASES["default"] = DATABASES.get("default", {})
@@ -192,26 +193,6 @@ SENTRY_TAGSTORE_OPTIONS = {}
 # The digest backend powers notification summaries.
 
 SENTRY_DIGESTS = "sentry.digests.backends.redis.RedisBackend"
-
-################
-# File storage #
-################
-
-# Uploaded media uses these `filestore` settings. The available
-# backends are either `filesystem` or `s3`.
-
-SENTRY_OPTIONS['filestore.backend'] = env('SENTRY_FILESTORE_BACKEND') or 'filesystem'
-
-if SENTRY_OPTIONS['filestore.backend'] == 's3':
-        SENTRY_OPTIONS['filestore.options'] = {
-        'bucket_name' : env('SENTRY_FILESTORE_BUCKET'),
-        'default_acl' : 'private',
-        'region_name' : env('AWS_REGION') or 'us-east-1',
-    }
-else:
-    SENTRY_OPTIONS['filestore.options'] = {
-        'location': env('SENTRY_FILESTORE_DIR'),
-    }
 
 ##############
 # Web Server #
