@@ -49,7 +49,7 @@ SENTRY_USE_BIG_INTS = True
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
-SENTRY_SINGLE_ORGANIZATION = Bool(env('SENTRY_SINGLE_ORGANIZATION', True)
+SENTRY_SINGLE_ORGANIZATION = Bool(env('SENTRY_SINGLE_ORGANIZATION', True))
 
 SENTRY_OPTIONS["system.event-retention-days"] = int(
     env("SENTRY_EVENT_RETENTION_DAYS", "90")
@@ -59,8 +59,8 @@ SENTRY_OPTIONS["system.event-retention-days"] = int(
 # Database           #
 ######################
 
-if "DATABASE_URL" in os.environ:
-    url = urlparse(os.environ["DATABASE_URL"])
+if env("DATABASE_URL", None) is not None:
+    url = urlparse(env("DATABASE_URL"))
 
     # Ensure default database exists.
     DATABASES["default"] = DATABASES.get("default", {})
@@ -256,10 +256,12 @@ SENTRY_WEB_OPTIONS = {
 # If you're using a reverse SSL proxy, you should enable the X-Forwarded-Proto
 # header and enable the settings below
 
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
-# SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+if Bool(env('SENTRY_SSL', False)):
+
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 # End of SSL/TLS settings
 
