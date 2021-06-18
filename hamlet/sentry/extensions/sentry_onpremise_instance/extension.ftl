@@ -77,6 +77,11 @@
                 "OIDC_DOMAIN" : "USERPOOL_OIDC_ISSUER"
             }
         /]
+        [@Settings
+            {
+                "OIDC_SCOPE" : "openid profile email"
+            }
+        /]
     [/#if]
 
     [@Settings
