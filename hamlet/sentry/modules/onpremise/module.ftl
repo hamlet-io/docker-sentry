@@ -505,7 +505,7 @@
             "Processors" : {
                 "sentry" : {
                     "EC2": {
-                        "Processor": "t3a.medium"
+                        "Processor": "m5a.large"
                     }
                 }
             },
