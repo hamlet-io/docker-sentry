@@ -158,7 +158,7 @@
         {
             "Names" : "userPoolClientLink",
             "Description" : "A link to a userpool client that will be used for integrated auth",
-            "Ref" : LINK_ATTRIBUTESET_TYPE
+            "AttributeSet" : LINK_ATTRIBUTESET_TYPE
         }
     ]
 /]
