@@ -17,6 +17,46 @@ The solution includes the following:
 - S3 bucket for filestore backend
 - IAM user which is used for SMTP email support with SES
 
+#### Setup Process
+
+When updating or deploying the onpremise module you will need to run the install.sh script from the ec2 instance created by the module.
+The simplest way to do this is through an SSM Session Manager Session
+
+1. Log into the AWS Console and locate the Sentry instance that has been deployed in the Ec2 Console
+2. Tick the instance and click the connect button in the top right of the console
+3. Select the Session Manager connection option and click Connect
+4. This will take you into a console on the instance
+5. Run the following to run the install script
+
+    ```bash
+    # become the root user who owns the docker-compose service
+    sudo su
+
+    cd /home/sentry/docker-sentry
+    ./install.sh
+    ```
+
+6. The install script will create the required docker volumes and perform administration tasks like database migrations
+
+#### Local User
+
+If you are still in the process of configuring authentication you can create a local admin user within the sentry install
+
+1. Based on the steps in [link](####Setup Process) open an SSM Session
+2. Run the following on the instance to open a session on the sentry web container and create a user
+
+    ```bash
+    sudo su
+
+    cd /home/sentry/docker-sentry
+    docker-compose exec web /bin/sh
+
+    # once you are in the container create your new user
+    sentry createuser
+    ```
+
+3. Follow the prompts to create your user and set the password. For the first user select that the user will be a super user to ensure you have configuration access
+
 ### Integrations
 
 There are a number of integrations available for sentry that can be configured as part of the module
