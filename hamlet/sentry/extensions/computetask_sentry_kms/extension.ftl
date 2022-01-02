@@ -50,7 +50,7 @@
                                         }
                                     ]
                                 },
-                                r'       echo "export ${KEY}=\"${VALUE}\"" >> /opt/hamlet_cfninit/set_env.sh',
+                                r'       echo "export ${KEY}=' + r"'${VALUE}'" + r'" >> /opt/hamlet_cfninit/set_env.sh',
                                 r'    fi',
                                 r'done'
                             ]
